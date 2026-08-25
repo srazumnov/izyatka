@@ -1,0 +1,699 @@
+<title>Изъятка</title>
+<meta name="description" content="Изъятая техника лизинговых компаний: спецтехника, грузовики, автобусы, оборудование и легковые из 24 лизинговых компаний. Цены ниже рынка, оформление в лизинг.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap">
+
+<style>
+:root{
+  --ink:#14160F;
+  --bg:#F4F4EE;
+  --surface:#FFFFFF;
+  --surface-2:#EBEBE2;
+  --line:#D6D6C9;
+  --text:#14160F;
+  --muted:#5E6155;
+  --accent:#B3730A;
+  --accent-ink:#FFFFFF;
+  --flag:#B23A22;
+  --shadow:0 1px 2px rgba(20,22,15,.06), 0 8px 24px -12px rgba(20,22,15,.18);
+  --r:4px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131510;
+    --surface:#1B1E18;
+    --surface-2:#242820;
+    --line:#333828;
+    --text:#EDEFE6;
+    --muted:#9DA391;
+    --accent:#E8A317;
+    --accent-ink:#14160F;
+    --flag:#DE5B3C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131510;
+  --surface:#1B1E18;
+  --surface-2:#242820;
+  --line:#333828;
+  --text:#EDEFE6;
+  --muted:#9DA391;
+  --accent:#E8A317;
+  --accent-ink:#14160F;
+  --flag:#DE5B3C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"PT Sans","Segoe UI",Arial,sans-serif;
+  font-size:17px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:Oswald,"PT Sans",Arial,sans-serif;font-weight:500;letter-spacing:.01em;text-wrap:balance;margin:0}
+a{color:inherit}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit}
+.wrap{width:min(1180px,100% - 2.5rem);margin-inline:auto}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- header ---------- */
+.top{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.top-in{display:flex;align-items:center;gap:1rem;padding:.75rem 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;margin-right:auto}
+.mark{
+  width:34px;height:34px;flex:none;border-radius:3px;
+  background:var(--accent);color:var(--accent-ink);
+  display:grid;place-items:center;
+  font-family:Oswald,sans-serif;font-size:21px;line-height:1;padding-top:2px;
+}
+.brand b{font-family:Oswald,sans-serif;font-weight:600;font-size:1.35rem;letter-spacing:.06em;text-transform:uppercase}
+.brand span{display:block;font-size:.72rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:-2px}
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.55rem 1.1rem;border-radius:var(--r);
+  border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);
+  font-family:Oswald,sans-serif;font-size:.95rem;letter-spacing:.05em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;transition:filter .15s ease, transform .15s ease;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(2.5rem,6vw,4.5rem) 0 2rem;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(2.3rem,6.4vw,4.1rem);line-height:1.02;text-transform:uppercase;letter-spacing:.005em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{max-width:60ch;color:var(--muted);margin:1.1rem 0 0;font-size:1.06rem}
+.stats{display:flex;flex-wrap:wrap;gap:2.2rem;margin-top:2rem}
+.stat b{display:block;font-family:Oswald,sans-serif;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+
+/* ---------- filters ---------- */
+.filters{padding:1.5rem 0 .5rem;position:sticky;top:60px;z-index:30;background:var(--bg)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem}
+.chip{
+  padding:.4rem .85rem;border:1px solid var(--line);border-radius:99px;background:transparent;
+  font-size:.9rem;cursor:pointer;white-space:nowrap;transition:all .15s ease;
+}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.search{flex:1 1 260px;position:relative}
+.search input,.tools select{
+  width:100%;padding:.6rem .9rem;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);color:var(--text);font:inherit;font-size:.95rem;
+}
+.tools select{width:auto}
+.count{margin-left:auto;color:var(--muted);font-size:.9rem}
+
+/* ---------- grid ---------- */
+.grid{
+  display:grid;gap:1.1rem;padding:1.25rem 0 3rem;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;cursor:pointer;display:flex;flex-direction:column;
+  transition:border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+  text-align:left;padding:0;
+}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.ph{position:relative;aspect-ratio:4/3;background:var(--surface-2);overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph .fallback{
+  position:absolute;inset:0;display:grid;place-items:center;gap:.3rem;
+  color:var(--muted);font-family:Oswald,sans-serif;letter-spacing:.12em;
+  text-transform:uppercase;font-size:.75rem;text-align:center;padding:1rem;
+}
+.tag{
+  position:absolute;left:0;top:.7rem;
+  background:var(--flag);color:#fff;font-family:Oswald,sans-serif;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.25rem .7rem .25rem .6rem;
+}
+.tag-new{background:var(--accent);color:var(--accent-ink)}
+.card-b{padding:.9rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.55rem;flex:1}
+.card-b h3{font-size:1.18rem;line-height:1.15}
+.price{font-family:Oswald,sans-serif;font-size:1.5rem;font-variant-numeric:tabular-nums;line-height:1}
+.price small{font-size:.72rem;color:var(--muted);letter-spacing:.06em;display:block;text-transform:uppercase;margin-top:.25rem;font-family:"PT Sans",sans-serif}
+.specs{display:flex;flex-wrap:wrap;gap:.3rem .85rem;font-size:.87rem;color:var(--muted);margin-top:auto}
+.specs span{white-space:nowrap}
+.saving{color:var(--accent);font-size:.85rem;font-weight:700}
+
+/* ---------- how ---------- */
+.band{background:var(--surface);border-block:1px solid var(--line);padding:clamp(2.5rem,5vw,4rem) 0}
+.band h2,.lead h2{font-size:clamp(1.7rem,3.6vw,2.4rem);text-transform:uppercase}
+.sub{color:var(--muted);max-width:62ch;margin:.7rem 0 0}
+.steps{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:2.2rem;counter-reset:s}
+.step{border-top:2px solid var(--accent);padding-top:.9rem}
+.step b{display:block;font-family:Oswald,sans-serif;font-size:.8rem;letter-spacing:.16em;color:var(--accent);text-transform:uppercase}
+.step h3{font-size:1.1rem;margin:.35rem 0 .35rem}
+.step p{margin:0;color:var(--muted);font-size:.94rem}
+
+/* ---------- lead ---------- */
+.lead{padding:clamp(2.5rem,5vw,4rem) 0}
+.lead-grid{display:grid;gap:2.5rem;grid-template-columns:1fr;align-items:start}
+@media(min-width:820px){.lead-grid{grid-template-columns:1fr 1fr}}
+form{display:grid;gap:.75rem}
+label{display:grid;gap:.3rem;font-size:.83rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+input,textarea{
+  padding:.7rem .9rem;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);color:var(--text);font:inherit;font-size:1rem;
+}
+textarea{resize:vertical;min-height:90px}
+.hp{position:absolute;left:-9999px}
+.formnote{font-size:.85rem;color:var(--muted);margin:.2rem 0 0}
+
+/* ---------- modal ---------- */
+dialog{
+  border:1px solid var(--line);border-radius:var(--r);padding:0;
+  background:var(--surface);color:var(--text);
+  width:min(920px,calc(100% - 2rem));max-height:88vh;box-shadow:var(--shadow);
+}
+dialog::backdrop{background:rgba(10,12,8,.72)}
+.m-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding:1.2rem 1.3rem .8rem;border-bottom:1px solid var(--line)}
+.m-head h2{font-size:1.5rem;line-height:1.15}
+.x{background:none;border:1px solid var(--line);border-radius:var(--r);width:34px;height:34px;flex:none;cursor:pointer;font-size:1.1rem;line-height:1}
+.m-body{padding:1.2rem 1.3rem 1.5rem;overflow:auto;display:grid;gap:1.3rem}
+.gal{display:grid;gap:.5rem;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.gal .ph{aspect-ratio:4/3;border:1px solid var(--line);border-radius:3px}
+.table{width:100%;border-collapse:collapse;font-size:.97rem}
+.table td{padding:.5rem 0;border-bottom:1px solid var(--line);vertical-align:top}
+.table td:first-child{color:var(--muted);width:44%;padding-right:1rem}
+.desc p{margin:0 0 .7rem}
+.m-cta{display:flex;gap:.6rem;flex-wrap:wrap}
+
+footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);font-size:.9rem}
+.foot{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.empty{padding:3rem 0;color:var(--muted);text-align:center;grid-column:1/-1}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#">
+      <span class="mark">И</span>
+      <span><b>Изъятка</b><span>Техника лизинговых компаний</span></span>
+    </a>
+    <a class="btn ghost" href="#kak">Как купить</a>
+    <a class="btn" href="https://t.me/vse_v_lizing" target="_blank" rel="noopener">Написать в Telegram</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Техника, <em>изъятая</em><br>лизинговыми компаниями</h1>
+      <p>Тягачи, самосвалы, спецтехника, автобусы, оборудование и легковые — из 24 лизинговых компаний. Цены ниже рынка, каталог обновляется каждый день. Нашли позицию — оформлю в лизинг, вся Россия.</p>
+      <div class="stats">
+        <div class="stat"><b class="num" id="s-count">—</b><span>позиций в каталоге</span></div>
+        <div class="stat"><b class="num">24</b><span>лизинговые компании</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="filters" id="katalog">
+    <div class="wrap">
+      <div class="chips" id="chips"></div>
+      <div class="tools">
+        <div class="search"><input id="q" type="search" placeholder="Поиск: марка, модель, город…" aria-label="Поиск по каталогу"></div>
+        <select id="sort" aria-label="Сортировка">
+          <option value="new">Сначала новые</option>
+          <option value="asc">Цена: по возрастанию</option>
+          <option value="desc">Цена: по убыванию</option>
+          <option value="year">Сначала свежее по году</option>
+        </select>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="grid" id="grid"></div></div>
+
+  <section class="band" id="kak">
+    <div class="wrap">
+      <h2>Как это работает</h2>
+      <p class="sub">Изъятая техника — это машины, которые лизинговая компания забрала у прежнего лизингополучателя. Она стоит на площадке и не приносит денег, поэтому её продают быстро и дешевле рынка.</p>
+      <div class="steps">
+        <div class="step"><b>Шаг 1</b><h3>Выбираете позицию</h3><p>В каталоге или в Telegram-канале. Пришлю дополнительные фото, документы и историю машины.</p></div>
+        <div class="step"><b>Шаг 2</b><h3>Считаем платёж</h3><p>Подбираю аванс и срок под ваш оборот. Сравниваем несколько лизинговых компаний — берём условия получше.</p></div>
+        <div class="step"><b>Шаг 3</b><h3>Оформляем договор</h3><p>Пакет документов минимальный: юрлицо или ИП, отчётность. Решение — обычно за 1–2 дня.</p></div>
+        <div class="step"><b>Шаг 4</b><h3>Забираете технику</h3><p>Организуем осмотр и перегон. Техника переходит к вам, платежи идут по графику.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lead" id="zayavka">
+    <div class="wrap lead-grid">
+      <div>
+        <h2>Оставьте заявку</h2>
+        <p class="sub">Напишите, что ищете, — подберу позиции под задачу и бюджет, в том числе те, что ещё не попали в каталог. Отвечаю в рабочее время, обычно в течение часа.</p>
+        <p class="sub" style="margin-top:1.2rem">Быстрее всего — в Telegram: <a href="https://t.me/vse_v_lizing" target="_blank" rel="noopener"><b>@vse_v_lizing</b></a></p>
+      </div>
+      <form name="zayavka" method="POST" data-netlify="true" netlify-honeypot="company">
+        <input type="hidden" name="form-name" value="zayavka">
+        <p class="hp"><label>Не заполняйте<input name="company"></label></p>
+        <label>Имя<input name="name" required autocomplete="name"></label>
+        <label>Телефон или Telegram<input name="contact" required autocomplete="tel"></label>
+        <label>Что ищете<textarea name="message" placeholder="Например: самосвал до 6 млн, Урал или Юг"></textarea></label>
+        <button class="btn" type="submit">Отправить заявку</button>
+        <p class="formnote">Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><b>Изъятка</b> — изъятая техника, конфискат, залог. Обновление каждый день.</div>
+    <div><a href="https://t.me/vse_v_lizing" target="_blank" rel="noopener">@vse_v_lizing</a></div>
+  </div>
+</footer>
+
+<dialog id="modal">
+  <div class="m-head">
+    <h2 id="m-title"></h2>
+    <button class="x" id="m-close" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="m-body" id="m-body"></div>
+</dialog>
+
+<script id="catalog" type="application/json">
+[
+  {
+    "id": "tank-500",
+    "title": "TANK 500",
+    "category": "Легковые",
+    "price": 3694600,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": "98 426 км",
+    "engine": "3.0 л, 300 л.с., бензин",
+    "city": "Санкт-Петербург",
+    "photos": 6,
+    "date": "2026-08-25",
+    "text": "Рамный внедорожник представительского размера: 3 литра, 300 сил, полный привод. Не кроссовер в кузове джипа — настоящая рама и клиренс, но салон при этом бизнес-класса: кожа, два экрана, электрорегулировки и вентиляция сидений.\n\n98 тысяч за два года — спокойная городская эксплуатация. На фото машина не мытая после дороги, но кузов ровный: вмятин и следов ремонта нет, панели и зазоры на месте.\n\nТакую машину берут первым лицам компании: статус на переговорах и реальная проходимость на объекте в одном автомобиле."
+  },
+  {
+    "id": "jac-n120l-bort",
+    "title": "Грузовой бортовой JAC N120L",
+    "category": "Грузовики",
+    "price": 2871400,
+    "priceCash": null,
+    "year": 2024,
+    "mileage": "307 926 км",
+    "engine": "4,5 л, 207 л.с., дизель",
+    "city": "Воронеж",
+    "photos": 5,
+    "date": "2026-08-25",
+    "text": "Бортовая платформа с тентом — самый универсальный кузов из всех: паллеты, стройматериалы, мебель, оборудование. Боковой полог сдвигается, значит грузить можно погрузчиком с боку, а не только через задний борт. На развозке это экономит по часу на каждой точке.\n\n307 тысяч за год — машина не стояла ни дня, и цена это честно отражает: 2,87 млн за среднетоннажник 2024 года. 207 сил и 4,5 литра дают запас под полную загрузку на трассе, а не только для города."
+  },
+  {
+    "id": "gaz-3010ga-ref",
+    "title": "Рефрижератор ГАЗ 3010GA (ГАЗон NEXT)",
+    "category": "Грузовики",
+    "price": 2591500,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": "139 575 км",
+    "engine": "168 л.с., дизель, механика, 4×2",
+    "city": "Краснодар",
+    "photos": 5,
+    "date": "2026-08-25",
+    "text": "Машина под холодную цепь: рефустановка на крыше, фургон изнутри целый — снял отдельным кадром, чтобы было видно стены и пол без заплат и пробоин.\n\nГабарит ГАЗона проходит туда, куда пятитонник уже не заедет: дворы, рынки, задние въезды магазинов. 139 тысяч за два года — обычный городской развоз. Дизель и механика: чинится в любом сервисе, запчасти на любой базе, без ожидания дилера."
+  },
+  {
+    "id": "dongfeng-dfh",
+    "title": "Седельный тягач Dongfeng DFH",
+    "category": "Грузовики",
+    "price": 6174050,
+    "priceCash": null,
+    "year": 2024,
+    "mileage": "209 024 км",
+    "engine": "508 л.с., дизель",
+    "city": "Уфа",
+    "photos": 4,
+    "date": "2026-08-25",
+    "text": "Машина 2024 года: две ведущие оси, высокая спальная кабина, 508 сил. Классическая магистральная связка под фуру и дальнее плечо — на подъёмах с полной массой тянет без надрыва.\n\n209 тысяч за год — темп плотный, машина не стояла. Зато это и есть причина цены: тягач 2024 года за 6,17 млн. Седло и рама в рабочем состоянии, резина на мостах живая."
+  },
+  {
+    "id": "yonggong-yglz400",
+    "title": "Экскаватор-перегружатель YONGGONG-BORUS YGLZ-400",
+    "category": "Спецтехника",
+    "price": 12495000,
+    "priceCash": null,
+    "year": 2022,
+    "mileage": "1 475 м/ч",
+    "engine": "Колёсный, с подъёмной кабиной и аутригерами",
+    "city": "Екатеринбург",
+    "photos": 4,
+    "date": "2026-08-24",
+    "text": "1 475 моточасов для техники 2022 года — это почти что с завода. YGLZ-400 совмещает две функции в одной машине: копает там, где нужно, и перегружает туда, куда скажете. Универсальность, которая экономит на парке техники и персонале.\n\nМашина в отличном состоянии, полностью готова к выходу на объект без дополнительных вложений. Цена в лизинг — выгоднее новой, а ресурс практически тот же.\n\nЕкатеринбург, доставка по РФ."
+  },
+  {
+    "id": "sitrak-c7h-max",
+    "title": "Седельный тягач Sitrak C7H MAX",
+    "category": "Грузовики",
+    "price": 7324000,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": "119 249 км",
+    "engine": "12,4 л, 480 л.с., дизель, автомат",
+    "city": "Ростовская область",
+    "photos": 5,
+    "date": "2026-08-25",
+    "text": "480 сил, 12,4 литра и автомат — то сочетание, ради которого C7H MAX и берут на дальнее плечо. На магистрали автомат снимает с водителя половину усталости, а сцепление живёт дольше, чем на механике в пробках и на подъёмах.\n\n119 тысяч за два года — для магистрального тягача немного, машина ходила в спокойном ритме. Кабина высокая, приборка цифровая, салон целый.\n\nСкидка после осмотра — приезжайте и смотрите."
+  },
+  {
+    "id": "grohot-korona-1400",
+    "title": "Барабанный грохот «Корона 1400» — комплект для сортировки",
+    "category": "Оборудование",
+    "tag": "В наличии",
+    "price": 3000000,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": null,
+    "engine": "20–130 м³/ч · барабан 1400 мм · привод 7,5 кВт",
+    "city": "Волжский",
+    "photos": 3,
+    "date": "2026-08-25",
+    "text": "Полный комплект под ключ: грохот 2023 года в отличном состоянии плюс два конвейера ЛЖК 2024 года выпуска (4 м и 8 м, ширина 650 мм, подъём до 2,9 м) и 10 новых сеток 5 мм в придачу. Покупаете — и сразу запускаете линию, без дополнительных вложений в навесное.\n\nБарабан диаметром 1400 мм и длиной просеивающей поверхности 4000 мм выдаёт 20–130 м³/ч в зависимости от фракции. Рифлёная высокоуглеродистая сетка с ячейкой от 2 мм держит ударные нагрузки щебня и ПГС. Электропривод 7,5 кВт — надёжный, неприхотливый, легко обслуживается на любом объекте.\n\nМасса 4500 кг, габариты 8000×2000×2900 мм — транспортируется и устанавливается без лишней головной боли. Техника готова к отгрузке.\n\nОсмотр в Волжском, доставка и лизинг подберу под ваш график. Скидка после осмотра."
+  },
+  {
+    "id": "mekamix-140-compact",
+    "title": "Бетоносмесительная установка MEKAMIX 140 COMPACT",
+    "category": "Оборудование",
+    "tag": "Новая",
+    "price": 21000000,
+    "priceCash": null,
+    "year": 2024,
+    "mileage": null,
+    "engine": "До 120 м³/час готового бетона",
+    "city": "Волжский",
+    "photos": 2,
+    "date": "2026-08-25",
+    "text": "Производительность до 120 м³/час по готовому бетону в непрерывном режиме. Завод в компактном исполнении, но с промышленной мощностью — под крупные площадки, где важен каждый кубометр и каждая минута.\n\nАвтоматизированная линия с точным дозированием трёх компонентов заполнителя, цемента и воды. Стабильная рецептура при влажности песка до 5%, водоцементном отношении 0,5 и 15-секундном цикле перемешивания. Работает уверенно при положительных температурах, при стабильной подаче электроэнергии и воды.\n\n2024 год — фактически новая, без износа, готова к запуску сразу после монтажа. Полный ресурс, заводская гарантия, полный пакет документов.\n\nОформлю лизинг или продажу — условия подберём под ваш проект. Осмотр в Волжском."
+  },
+  {
+    "id": "riexpo-bmk",
+    "title": "Блочно-модульная котельная RIEXPO",
+    "category": "Оборудование",
+    "tag": "Новая",
+    "price": 8000000,
+    "priceCash": null,
+    "year": 2024,
+    "mileage": null,
+    "engine": "Воздухонагреватель НТ 10000 + котёл К 750",
+    "city": "Волжский",
+    "photos": 3,
+    "date": "2026-08-25",
+    "text": "В составе: высокотемпературный воздухонагреватель RIEXPO НТ 10000 и водогрейный котёл RIEXPO K 750. Внутренний газопровод, входное давление природного газа до 0,03 МПа — подключай и запускай.\n\nБМК 2024 года выпуска — новая, не работала. Заводская сборка, готова к эксплуатации сразу после монтажа на объекте.\n\nОсмотр в Волжском, доставка по РФ."
+  },
+  {
+    "id": "dongfeng-gx-6x4",
+    "title": "Седельный тягач Dongfeng GX 6×4",
+    "category": "Грузовики",
+    "price": 4655000,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": "249 543 км",
+    "engine": "13 л, 508 л.с., дизель",
+    "city": "Барнаул",
+    "photos": 4,
+    "date": "2026-08-25",
+    "text": "508 сил и 13 литров — это магистральная машина под полную загрузку и дальнее плечо. Формула 6×4, обе задние оси ведущие: такой тягач не встаёт на разбитой площадке и зимнем подъёме, куда 4×2 просто не заедет.\n\n249 тысяч за два года — обычный магистральный ритм, для 13-литрового мотора это ещё начало ресурса. Кузов ровный, кабина высокая, салон и приборка целые."
+  },
+  {
+    "id": "haval-dargo",
+    "title": "HAVAL Dargo",
+    "category": "Легковые",
+    "price": 2410800,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": "26 022 км",
+    "engine": "2.0 л, 192 л.с., бензин",
+    "city": "Новосибирск",
+    "photos": 6,
+    "date": "2026-08-19",
+    "text": "26 тысяч за два года — машина фактически новая. Салон целый, экраны и обшивка без следов, кузов ровный, пороги и рейлинги на месте.\n\nВнешность внедорожника, начинка комфортного кроссовера: 192 силы, автомат, два экрана. Хороший вариант в парк компании — руководителю участка, на объекты, под представительские поездки."
+  },
+  {
+    "id": "lovol-td1304",
+    "title": "Трактор Lovol TD1304",
+    "category": "Сельхозтехника",
+    "price": 3464517,
+    "priceCash": null,
+    "year": 2021,
+    "mileage": null,
+    "engine": "128 л.с., дизель, механика",
+    "city": "Оренбург",
+    "photos": 5,
+    "date": "2026-08-19",
+    "text": "128 сил, полный привод, комплект балласта спереди — рабочая лошадь общего назначения: пахота, культивация, сев, транспорт по хозяйству. Задняя навеска и гидровыводы на месте, резина ведущая на всех четырёх, протектор живой.\n\nМеханика — это плюс, а не минус: меньше электроники, чинится в своей мастерской, без ожидания дилера в разгар посевной."
+  },
+  {
+    "id": "kran-kk10",
+    "title": "Кран козловой электрический КК-10",
+    "category": "Оборудование",
+    "price": 8190000,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": null,
+    "engine": "Грузоподъёмность 10 т, 380 В, исполнение У1",
+    "city": "Санкт-Петербург",
+    "photos": 5,
+    "date": "2026-08-19",
+    "text": "Кран для площадки, где грузят каждый день: склад металла, ЖБИ, пилорама, база стройматериалов. Исполнение У1 — цех не нужен, работает под открытым небом круглый год. Коробчатое сечение моста жёстче трубчатого и меньше играет под нагрузкой.\n\nСчитайте сами: аренда автокрана на постоянной погрузке съедает эти деньги за пару сезонов, а козловой стоит на своих рельсах и работает от сети.\n\nПолная марка: КК-10-А6-41-(10+0)-10-0,2-1,0-0,53-380-У1"
+  },
+  {
+    "id": "politrans-94171",
+    "title": "Полуприцеп-сортиментовоз ПОЛИТРАНС 94171-011",
+    "category": "Прицепы",
+    "price": 3253600,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": null,
+    "engine": "Три оси, коники + откидные борта",
+    "city": "Тюмень",
+    "photos": 4,
+    "date": "2026-08-19",
+    "text": "Три оси, коники под сортимент и при этом полноценные откидные борта — сочетание, за которое эту модель и берут. Сегодня везёте лес, завтра снимаете стойки и грузите трубу, плиты, поддоны. Один полуприцеп вместо двух.\n\n2023 год, передний защитный щит и рама целые. Тюмень — то есть прицеп уже стоит там, где лес возят."
+  },
+  {
+    "id": "paz-320405",
+    "title": "Городской автобус ПАЗ 320405",
+    "category": "Автобусы",
+    "price": 2930200,
+    "priceCash": null,
+    "year": 2023,
+    "mileage": "305 745 км",
+    "engine": "4.4 л, 169 л.с., дизель",
+    "city": "Москва",
+    "photos": 5,
+    "date": "2026-08-19",
+    "text": "Салон чисто городской: накопительная площадка, поручни по всей длине, сиденья под короткие поездки. Машина под маршрут, вахту или развозку смены.\n\nПробег 305 745 км за два года не скрываю — автобус работал плотно, и цена это учитывает. Плюс ПАЗа как раз в этом: он чинится в любом райцентре, запчасти есть везде, простой считается днями, а не неделями."
+  },
+  {
+    "id": "bomag-bw203",
+    "title": "Каток BOMAG BW 203 ADO-4",
+    "category": "Спецтехника",
+    "price": 10510800,
+    "priceCash": 10953360,
+    "year": 2023,
+    "mileage": "2 745 км",
+    "engine": "103 л.с., 1 500 см³",
+    "city": "Ростов-на-Дону",
+    "photos": 4,
+    "date": "2026-08-19",
+    "text": "Тандем: оба вальца ведущие и вибрационные — это класс под асфальт на дорогах и площадках, а не под двор. 2023 год и 2 745 км: пара сезонов работы, ресурс почти весь впереди.\n\nОбратите внимание на цены: в лизинг машина выходит на 442 560 ₽ дешевле, чем при прямой покупке. Тот случай, когда рассрочка стоит меньше денег сразу."
+  },
+  {
+    "id": "jac-n90-ref",
+    "title": "Рефрижератор JAC N90",
+    "category": "Грузовики",
+    "price": 4417500,
+    "priceCash": null,
+    "year": 2022,
+    "mileage": "3 445 км",
+    "engine": "3.8 л, 152 л.с., дизель",
+    "city": "Москва",
+    "photos": 6,
+    "date": "2026-08-19",
+    "text": "3 445 км за четыре года — это не пробег, а обкатка: машина ходила по городу на коротких развозах. Рефустановка на крыше, изотермический фургон под продукты — хоть завтра под доставку в магазины, кафе и рестораны. Оклейку прошлого владельца снять, и кузов под ней чистый."
+  }
+]
+</script>
+
+<script>
+(function(){
+  "use strict";
+  var DATA = JSON.parse(document.getElementById("catalog").textContent);
+  var TG = "https://t.me/vse_v_lizing";
+  var state = { cat: "Все", q: "", sort: "new" };
+
+  var rub = function(n){ return n.toLocaleString("ru-RU") + " ₽"; };
+
+  var esc = function(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  };
+
+  function photo(item, i, cls){
+    var src = "images/" + item.id + "-" + i + ".jpg";
+    return '<div class="ph ' + (cls||"") + '">' +
+      '<div class="fallback">' + esc(item.category) + '<br>фото ' + i + '</div>' +
+      '<img src="' + src + '" alt="' + esc(item.title) + '" loading="lazy" ' +
+      'onerror="this.remove()">' +
+    '</div>';
+  }
+
+  // ---- filters
+  var cats = ["Все"].concat(DATA.map(function(d){ return d.category; })
+    .filter(function(v,i,a){ return a.indexOf(v) === i; }).sort());
+
+  var chips = document.getElementById("chips");
+  chips.innerHTML = cats.map(function(c){
+    return '<button class="chip" type="button" data-cat="' + esc(c) + '" aria-pressed="' +
+      (c === "Все") + '">' + esc(c) + '</button>';
+  }).join("");
+  chips.addEventListener("click", function(e){
+    var b = e.target.closest(".chip"); if(!b) return;
+    state.cat = b.dataset.cat;
+    Array.prototype.forEach.call(chips.children, function(el){
+      el.setAttribute("aria-pressed", String(el === b));
+    });
+    render();
+  });
+
+  document.getElementById("q").addEventListener("input", function(e){
+    state.q = e.target.value.trim().toLowerCase(); render();
+  });
+  document.getElementById("sort").addEventListener("change", function(e){
+    state.sort = e.target.value; render();
+  });
+
+  // ---- render
+  var grid = document.getElementById("grid");
+  var count = document.getElementById("count");
+
+  function visible(){
+    var list = DATA.filter(function(d){
+      if(state.cat !== "Все" && d.category !== state.cat) return false;
+      if(!state.q) return true;
+      var hay = (d.title + " " + d.city + " " + d.category + " " + (d.engine||"") + " " + d.text).toLowerCase();
+      return hay.indexOf(state.q) !== -1;
+    });
+    var s = state.sort;
+    list.sort(function(a,b){
+      if(s === "asc") return a.price - b.price;
+      if(s === "desc") return b.price - a.price;
+      if(s === "year") return (b.year||0) - (a.year||0);
+      return 0;
+    });
+    return list;
+  }
+
+  function render(){
+    var list = visible();
+    count.textContent = list.length ? (list.length + " " + plural(list.length, ["позиция","позиции","позиций"])) : "";
+    if(!list.length){
+      grid.innerHTML = '<p class="empty">По этому запросу ничего нет. Напишите в Telegram — подберу под задачу.</p>';
+      return;
+    }
+    grid.innerHTML = list.map(function(d){
+      var saving = d.priceCash ? d.priceCash - d.price : 0;
+      return '<button class="card" type="button" data-id="' + esc(d.id) + '">' +
+        '<div class="ph">' +
+          '<span class="tag' + (d.tag && d.tag !== "Изъятая" ? " tag-new" : "") + '">' + esc(d.tag || "Изъятая") + '</span>' +
+          '<div class="fallback">' + esc(d.category) + '</div>' +
+          '<img src="images/' + esc(d.id) + '-1.jpg" alt="' + esc(d.title) + '" loading="lazy" onerror="this.remove()">' +
+        '</div>' +
+        '<div class="card-b">' +
+          '<h3>' + esc(d.title) + '</h3>' +
+          '<div class="price num">' + rub(d.price) + '<small>в лизинг, с НДС</small></div>' +
+          (saving > 0 ? '<div class="saving num">На ' + rub(saving) + ' дешевле прямой покупки</div>' : '') +
+          '<div class="specs">' +
+            (d.year ? '<span>' + d.year + ' г.</span>' : '') +
+            (d.mileage ? '<span class="num">' + esc(d.mileage) + '</span>' : '') +
+            '<span>' + esc(d.city) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</button>';
+    }).join("");
+  }
+
+  function plural(n, f){
+    var n10 = n % 10, n100 = n % 100;
+    if(n10 === 1 && n100 !== 11) return f[0];
+    if(n10 >= 2 && n10 <= 4 && (n100 < 10 || n100 >= 20)) return f[1];
+    return f[2];
+  }
+
+  // ---- modal
+  var modal = document.getElementById("modal");
+  document.getElementById("m-close").addEventListener("click", function(){ modal.close(); });
+  modal.addEventListener("click", function(e){ if(e.target === modal) modal.close(); });
+
+  grid.addEventListener("click", function(e){
+    var c = e.target.closest(".card"); if(!c) return;
+    var d = DATA.filter(function(x){ return x.id === c.dataset.id; })[0]; if(!d) return;
+    open(d);
+  });
+
+  function open(d){
+    document.getElementById("m-title").textContent = d.title;
+    var gal = "";
+    for(var i = 1; i <= Math.min(d.photos || 1, 6); i++) gal += photo(d, i);
+    var saving = d.priceCash ? d.priceCash - d.price : 0;
+    var rows = [
+      ["Цена в лизинг", '<b class="num">' + rub(d.price) + '</b> с НДС'],
+      d.priceCash ? ["Цена без лизинга", '<span class="num">' + rub(d.priceCash) + '</span> с НДС'] : null,
+      d.year ? ["Год выпуска", d.year] : null,
+      d.mileage ? ["Пробег", '<span class="num">' + esc(d.mileage) + '</span>'] : null,
+      d.engine ? ["Характеристики", esc(d.engine)] : null,
+      ["Местоположение", esc(d.city)],
+      ["Категория", esc(d.category)]
+    ].filter(Boolean);
+
+    document.getElementById("m-body").innerHTML =
+      '<div class="gal">' + gal + '</div>' +
+      (saving > 0 ? '<p class="saving num">В лизинг на ' + rub(saving) + ' дешевле, чем при прямой покупке.</p>' : '') +
+      '<table class="table"><tbody>' + rows.map(function(r){
+        return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+      }).join("") + '</tbody></table>' +
+      '<div class="desc">' + d.text.split("\n\n").map(function(p){
+        return '<p>' + esc(p) + '</p>';
+      }).join("") + '</div>' +
+      '<div class="m-cta">' +
+        '<a class="btn" target="_blank" rel="noopener" href="' + TG + '">Запросить по этой позиции</a>' +
+        '<a class="btn ghost" href="#zayavka" data-close>Оставить заявку на сайте</a>' +
+      '</div>';
+
+    modal.querySelectorAll("[data-close]").forEach(function(el){
+      el.addEventListener("click", function(){ modal.close(); });
+    });
+    modal.showModal();
+  }
+
+  // ---- stats
+  document.getElementById("s-count").textContent = DATA.length;
+
+  render();
+})();
+</script>
