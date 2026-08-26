@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Заявка отправлена — Изъятка</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=PT+Sans:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#F4F4EE; --surface:#FFFFFF; --line:#D6D6C9;
+  --text:#14160F; --muted:#5E6155; --accent:#B3730A; --accent-ink:#FFFFFF;
+  --shadow:0 1px 2px rgba(20,22,15,.06), 0 8px 24px -12px rgba(20,22,15,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131510; --surface:#1B1E18; --line:#333828;
+    --text:#EDEFE6; --muted:#9DA391; --accent:#E8A317; --accent-ink:#14160F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131510; --surface:#1B1E18; --line:#333828;
+  --text:#EDEFE6; --muted:#9DA391; --accent:#E8A317; --accent-ink:#14160F;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; display:grid; place-items:center; padding:2rem 1.25rem;
+  background:var(--bg); color:var(--text);
+  font:400 1rem/1.6 "PT Sans", system-ui, sans-serif;
+}
+.card{
+  max-width:34rem; width:100%; background:var(--surface); border:1px solid var(--line);
+  border-radius:4px; box-shadow:var(--shadow); padding:2.5rem 2rem; text-align:center;
+}
+h1{font:600 1.9rem/1.2 Oswald, system-ui, sans-serif; margin:0 0 .8rem; letter-spacing:.01em}
+p{color:var(--muted); margin:0 0 1rem}
+.mark{
+  width:3rem; height:3rem; margin:0 auto 1.4rem; border-radius:50%;
+  background:var(--accent); color:var(--accent-ink);
+  display:grid; place-items:center; font-size:1.5rem; font-weight:700;
+}
+.row{display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; margin-top:1.8rem}
+a.btn{
+  display:inline-block; padding:.7rem 1.3rem; border-radius:4px; text-decoration:none;
+  font:500 1rem/1 Oswald, system-ui, sans-serif; letter-spacing:.02em;
+}
+a.primary{background:var(--accent); color:var(--accent-ink)}
+a.ghost{border:1px solid var(--line); color:var(--text)}
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="mark">✓</div>
+    <h1>Заявка отправлена</h1>
+    <p>Спасибо! Я получил вашу заявку и отвечу в рабочее время — обычно в течение часа.</p>
+    <p>Если вопрос срочный, быстрее всего написать напрямую в Telegram.</p>
+    <div class="row">
+      <a class="btn primary" href="https://t.me/vse_v_lizing" target="_blank" rel="noopener">Написать в Telegram</a>
+      <a class="btn ghost" href="./">Вернуться в каталог</a>
+    </div>
+  </main>
+</body>
+</html>

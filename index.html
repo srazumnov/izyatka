@@ -265,9 +265,12 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
         <p class="sub">Напишите, что ищете, — подберу позиции под задачу и бюджет, в том числе те, что ещё не попали в каталог. Отвечаю в рабочее время, обычно в течение часа.</p>
         <p class="sub" style="margin-top:1.2rem">Быстрее всего — в Telegram: <a href="https://t.me/vse_v_lizing" target="_blank" rel="noopener"><b>@vse_v_lizing</b></a></p>
       </div>
-      <form name="zayavka" method="POST" data-netlify="true" netlify-honeypot="company">
-        <input type="hidden" name="form-name" value="zayavka">
-        <p class="hp"><label>Не заполняйте<input name="company"></label></p>
+      <form name="zayavka" method="POST" action="https://formsubmit.co/svr@atlant-consult.ru">
+        <input type="hidden" name="_subject" value="Изъятка: новая заявка с сайта">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://srazumnov.github.io/izyatka/spasibo.html">
+        <p class="hp"><label>Не заполняйте<input name="_honey"></label></p>
         <label>Имя<input name="name" required autocomplete="name"></label>
         <label>Телефон или Telegram<input name="contact" required autocomplete="tel"></label>
         <label>Что ищете<textarea name="message" placeholder="Например: самосвал до 6 млн, Урал или Юг"></textarea></label>
