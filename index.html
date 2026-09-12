@@ -2392,7 +2392,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
   function open(d){
     document.getElementById("m-title").textContent = d.title;
     var gal = "";
-    for(var i = 1; i <= Math.min(d.photos || 1, 6); i++) gal += photo(d, i);
+    for(var i = 1; i <= Math.min(d.photos || 1, 20); i++) gal += photo(d, i);
     var saving = d.priceCash ? d.priceCash - d.price : 0;
     var rows = [
       ["Цена в лизинг", '<b class="num">' + rub(d.price) + '</b> с НДС'],
