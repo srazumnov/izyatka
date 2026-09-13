@@ -313,6 +313,15 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
 
 <script id="catalog" type="application/json">[
   {
+    "id": "volkswagen-talagon",
+    "title": "Внедорожник Volkswagen Talagon",
+    "category": "Легковые",
+    "price": 4606290, "priceCash": null,
+    "year": 2023, "mileage": "47 319 км", "engine": "2,0 л, 220 л.с., бензин",
+    "city": null, "photos": 7, "date": "2026-09-13",
+    "text": "2023 год, пробег 47 319 км — внедорожник Volkswagen Talagon, двигатель 2,0 л, 220 л.с., бензин.\n\nИзъятая техника лизинговой компании.\nБыстро оформлю в лизинг, аванс и срок подберу под Ваш оборот."
+  },
+  {
     "id": "shehwa-ty160-3",
     "title": "Бульдозер SHEHWA TY160-3",
     "category": "Спецтехника",
@@ -2382,7 +2391,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
           '<div class="specs">' +
             (d.year ? '<span>' + d.year + ' г.</span>' : '') +
             (d.mileage ? '<span class="num">' + esc(d.mileage) + '</span>' : '') +
-            '<span>' + esc(d.city) + '</span>' +
+            (d.city ? '<span>' + esc(d.city) + '</span>' : '') +
           '</div>' +
         '</div>' +
       '</button>';
@@ -2418,7 +2427,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
       d.year ? ["Год выпуска", d.year] : null,
       d.mileage ? ["Пробег", '<span class="num">' + esc(d.mileage) + '</span>'] : null,
       d.engine ? ["Характеристики", esc(d.engine)] : null,
-      ["Местоположение", esc(d.city)],
+      d.city ? ["Местоположение", esc(d.city)] : null,
       ["Категория", esc(d.category)]
     ].filter(Boolean);
 
