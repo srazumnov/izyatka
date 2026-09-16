@@ -313,6 +313,15 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
 
 <script id="catalog" type="application/json">[
   {
+    "id": "komatsu-931-6wd-2",
+    "title": "Харвестер KOMATSU 931 6WD",
+    "category": "Спецтехника",
+    "price": "Цена по запросу", "priceCash": null,
+    "year": 2017, "mileage": "20 243 м/ч", "engine": null,
+    "city": "Хабаровск", "photos": 5, "date": "2026-09-16",
+    "text": "2017 год, наработка 20 243 м/ч — харвестер KOMATSU 931 6WD.\n\nИзъятая техника лизинговой компании.\nБыстро оформлю в лизинг, аванс и срок подберу под Ваш оборот."
+  },
+  {
     "id": "liliani-bp-25-31-4",
     "title": "Бункер-перегрузчик Лилиани БП-25/31-4",
     "category": "Сельхозтехника",
@@ -2531,7 +2540,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
   var TG = "https://t.me/vse_v_lizing";
   var state = { cat: "Все", q: "", sort: "new" };
 
-  var rub = function(n){ return n.toLocaleString("ru-RU") + " ₽"; };
+  var rub = function(n){ return typeof n === "number" ? n.toLocaleString("ru-RU") + " ₽" : String(n); };
 
   var esc = function(s){
     return String(s).replace(/[&<>"']/g, function(c){
@@ -2586,8 +2595,8 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
     });
     var s = state.sort;
     list.sort(function(a,b){
-      if(s === "asc") return a.price - b.price;
-      if(s === "desc") return b.price - a.price;
+      if(s === "asc") return (typeof a.price === "number" ? a.price : Infinity) - (typeof b.price === "number" ? b.price : Infinity);
+      if(s === "desc") return (typeof b.price === "number" ? b.price : -Infinity) - (typeof a.price === "number" ? a.price : -Infinity);
       if(s === "year") return (b.year||0) - (a.year||0);
       return 0;
     });
@@ -2611,7 +2620,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
         '</div>' +
         '<div class="card-b">' +
           '<h3>' + esc(d.title) + '</h3>' +
-          '<div class="price num">' + rub(d.price) + '<small>в лизинг, с НДС</small></div>' +
+          '<div class="price num">' + rub(d.price) + (typeof d.price === "number" ? '<small>в лизинг, с НДС</small>' : '') + '</div>' +
           (saving > 0 ? '<div class="saving num">На ' + rub(saving) + ' дешевле прямой покупки</div>' : '') +
           '<div class="specs">' +
             (d.year ? '<span>' + d.year + ' г.</span>' : '') +
@@ -2647,7 +2656,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
     for(var i = 1; i <= Math.min(d.photos || 1, 20); i++) gal += photo(d, i);
     var saving = d.priceCash ? d.priceCash - d.price : 0;
     var rows = [
-      ["Цена в лизинг", '<b class="num">' + rub(d.price) + '</b> с НДС'],
+      ["Цена в лизинг", '<b class="num">' + rub(d.price) + '</b>' + (typeof d.price === "number" ? ' с НДС' : '')],
       d.priceCash ? ["Цена без лизинга", '<span class="num">' + rub(d.priceCash) + '</span> с НДС'] : null,
       d.year ? ["Год выпуска", d.year] : null,
       d.mileage ? ["Пробег", '<span class="num">' + esc(d.mileage) + '</span>'] : null,
