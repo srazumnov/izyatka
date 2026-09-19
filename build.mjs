@@ -251,6 +251,8 @@ a.card{text-decoration:none;color:inherit;display:flex;flex-direction:column}
 .seo-links li a:hover{border-color:var(--accent);color:var(--accent)}
 .legal{margin-top:.6rem;font-size:.85rem;color:var(--muted)}
 .notfound{padding:4rem 0;text-align:center}.notfound h1{font-size:3rem}
+.doc{padding:1.6rem 0 3rem;max-width:820px}.doc h1{font-size:clamp(1.7rem,4.2vw,2.4rem);line-height:1.1;text-transform:uppercase}
+.doc h2{font-size:1.25rem;margin:2rem 0 .6rem}.doc p,.doc li{margin:.6rem 0;line-height:1.6}.doc ul{padding-left:1.3rem}.doc a{color:var(--accent)}.doc-date{color:var(--muted);font-size:.9rem;margin-top:.6rem}
 `;
 
 const faviconHead = fs.existsSync(path.join(ROOT, 'images/logo-mark.png'))
@@ -527,11 +529,16 @@ fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 
 // статические файлы репозитория (фото, og.jpg, CNAME и т. п.)
-const SKIP = new Set(['.git', '.gitignore', '.github', '_site', 'node_modules', 'README.md', 'SEO-README.md', 'build.mjs', 'site.config.json', 'index.html', 'spasibo.html']);
+const SKIP = new Set(['.git', '.gitignore', '.github', '_site', 'node_modules', 'README.md', 'SEO-README.md', 'build.mjs', 'site.config.json', 'index.html', 'spasibo.html', 'privacy.html']);
 for (const name of fs.readdirSync(ROOT)) {
   if (SKIP.has(name) || name === path.basename(OUT)) continue;
   fs.cpSync(path.join(ROOT, name), path.join(OUT, name), { recursive: true });
 }
+
+// политика обработки персональных данных: текст лежит в privacy.html (фрагмент), реквизиты подставляются из site.config.json
+const privacySrc = path.join(ROOT, 'privacy.html');
+const hasPrivacy = fs.existsSync(privacySrc);
+if (hasPrivacy && !CFG.privacyUrl) CFG.privacyUrl = '/privacy/';
 
 write('assets/site.css', STYLE + EXTRA_CSS);
 write('index.html', homePage());
@@ -539,6 +546,18 @@ const thanks = thanksPage() ?? (fs.existsSync(path.join(ROOT, 'spasibo.html')) ?
 if (thanks) write('spasibo.html', thanks);
 for (const c of CATS) write(c.path.slice(1) + 'index.html', catPage(c));
 for (const l of LOTS) write(l.path.slice(1) + 'index.html', lotPage(l));
+
+if (hasPrivacy) {
+  const vars = { legalName: CFG.legalName, inn: CFG.inn, address: CFG.address, phone: CFG.phone, email: CFG.email, siteUrl: BASE };
+  const text = fs.readFileSync(privacySrc, 'utf8').replace(/\{\{(\w+)\}\}/g, (m, k) => (vars[k] ? esc(vars[k]) : m));
+  if (/\{\{\w+\}\}/.test(text)) warn('В privacy.html остались незаполненные поля: ' + [...new Set(text.match(/\{\{\w+\}\}/g))].join(', ') + ' — заполните их в site.config.json');
+  write('privacy/index.html', page({
+    title: 'Политика обработки персональных данных — ' + CFG.siteName,
+    description: 'Как ' + CFG.siteName + ' обрабатывает и защищает персональные данные посетителей сайта.',
+    path: '/privacy/',
+    body: `<main><div class="wrap doc">${text}</div></main>`
+  }));
+}
 
 write('404.html', page({
   title: 'Страница не найдена — ' + CFG.siteName,
@@ -558,6 +577,7 @@ write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 ${urlEntry(BASE + '/', lastmod(LOTS))}
 ${CATS.map((c) => urlEntry(url(c.path), lastmod(c.lots))).join('\n')}
 ${LOTS.map((l) => urlEntry(url(l.path), l.date)).join('\n')}
+${hasPrivacy ? urlEntry(url('/privacy/')) : ''}
 </urlset>
 `);
 write('robots.txt', `User-agent: *
@@ -580,5 +600,5 @@ for (const f of walk(OUT).filter((x) => x.endsWith('.html'))) {
 }
 if (broken.size) { [...broken].slice(0, 30).forEach((b) => warn('Битая внутренняя ссылка: ' + b)); }
 
-console.log(`Готово: главная, ${CATS.length} разделов, ${LOTS.length} страниц позиций, sitemap.xml (${LOTS.length + CATS.length + 1} адресов).`);
+console.log(`Готово: главная, ${CATS.length} разделов, ${LOTS.length} страниц позиций, sitemap.xml (${LOTS.length + CATS.length + 1 + (hasPrivacy ? 1 : 0)} адресов).`);
 if (warnings.length) console.log(`Предупреждений: ${warnings.length}`);
