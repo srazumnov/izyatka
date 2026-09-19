@@ -493,6 +493,8 @@ function homePage() {
   if (!/class="seo-links"/.test(html)) html = html.replace(/<footer[\s>]/i, (m) => seo + '\n' + m);
   const legal = legalLine();
   if (legal) html = html.replace(/<\/footer>/i, '</footer>\n' + legal);
+  // в форме заявки: примечание про согласие ведёт на политику
+  if (CFG.privacyUrl) html = html.replace('Нажимая кнопку, вы соглашаетесь на обработку персональных данных.', `Нажимая кнопку, вы соглашаетесь с <a href="${esc(CFG.privacyUrl)}">политикой обработки персональных данных</a>.`);
 
   const goals = goalsScript(`if(e.target.closest&&e.target.closest(".card")&&window.ym)ym(${Number(CFG.metrikaId)},"reachGoal","open_card");`);
   if (goals) html = html.replace('</body>', goals + '\n</body>');
