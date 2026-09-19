@@ -493,10 +493,10 @@ function homePage() {
   if (!/class="seo-links"/.test(html)) html = html.replace(/<footer[\s>]/i, (m) => seo + '\n' + m);
   const legal = legalLine();
   if (legal) html = html.replace(/<\/footer>/i, '</footer>\n' + legal);
-  // форма заявки: вместо formsubmit.co (зарубежный сервис) — CRM-форма Битрикс24, серверы в РФ
-  const B24 = '<script data-b24-form="inline/4/gq7bxb" data-skip-moving="true">(function(w,d,u){var s=d.createElement("script");s.async=true;s.src=u+"?"+(Date.now()/180000|0);var h=d.getElementsByTagName("script")[0];h.parentNode.insertBefore(s,h);})(window,document,"https://cdn-ru.bitrix24.ru/b38147382/crm/form/loader_4.js");</script>';
-  const b24goal = '<style>.b24-form label,.b24-form label *,.b24-form span,.b24-form div,.b24-form input,.b24-form textarea{text-transform:none!important;letter-spacing:normal!important;font-family:Arial,Helvetica,sans-serif!important}.b24-form input[type=checkbox]{margin-right:8px}.b24-form .formnote{margin-top:.6rem}</style>' + (CFG.metrikaId ? `<script>window.addEventListener("b24:form:submit",function(){window.ym&&ym(${Number(CFG.metrikaId)},"reachGoal","lead_form");});</script>` : '');
-  const privNote = CFG.privacyUrl ? `<p class="formnote"><a href="${esc(CFG.privacyUrl)}">Политика обработки персональных данных</a></p>` : '';
+  // форма заявки: вместо formsubmit.co — российская Яндекс Форма (заявки приходят на почту владельца), встраивается в iframe
+  const B24 = '<script src="https://forms.yandex.ru/_static/embed.js"></script><iframe src="https://forms.yandex.ru/u/6aaec6d695add50489ef6afb/?iframe=1" frameborder="0" name="ya-form-6aaec6d695add50489ef6afb" width="100%" style="border:0;min-height:460px" title="Заявка"></iframe>';
+  const b24goal = '';
+  const privNote = CFG.privacyUrl ? `<p class="formnote">Нажимая «Отправить заявку», вы соглашаетесь с <a href="${esc(CFG.privacyUrl)}">политикой обработки персональных данных</a>.</p>` : '';
   if (/<form name="zayavka"/.test(html)) html = html.replace(/<form name="zayavka"[\s\S]*?<\/form>/i, `<div class="b24-form">\n${B24}\n${b24goal}\n${privNote}\n</div>`);
   // в форме заявки: примечание про согласие ведёт на политику
   if (CFG.privacyUrl) html = html.replace('Нажимая кнопку, вы соглашаетесь на обработку персональных данных.', `Нажимая кнопку, вы соглашаетесь с <a href="${esc(CFG.privacyUrl)}">политикой обработки персональных данных</a>.`);
