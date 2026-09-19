@@ -495,7 +495,7 @@ function homePage() {
   if (legal) html = html.replace(/<\/footer>/i, '</footer>\n' + legal);
   // форма заявки: вместо formsubmit.co (зарубежный сервис) — CRM-форма Битрикс24, серверы в РФ
   const B24 = '<script data-b24-form="inline/4/gq7bxb" data-skip-moving="true">(function(w,d,u){var s=d.createElement("script");s.async=true;s.src=u+"?"+(Date.now()/180000|0);var h=d.getElementsByTagName("script")[0];h.parentNode.insertBefore(s,h);})(window,document,"https://cdn-ru.bitrix24.ru/b38147382/crm/form/loader_4.js");</script>';
-  const b24goal = CFG.metrikaId ? `<script>window.addEventListener("b24:form:submit",function(){window.ym&&ym(${Number(CFG.metrikaId)},"reachGoal","lead_form");});</script>` : '';
+  const b24goal = '<style>.b24-form label,.b24-form label *,.b24-form span,.b24-form div,.b24-form input,.b24-form textarea{text-transform:none!important;letter-spacing:normal!important;font-family:Arial,Helvetica,sans-serif!important}.b24-form input[type=checkbox]{margin-right:8px}.b24-form .formnote{margin-top:.6rem}</style>' + (CFG.metrikaId ? `<script>window.addEventListener("b24:form:submit",function(){window.ym&&ym(${Number(CFG.metrikaId)},"reachGoal","lead_form");});</script>` : '');
   const privNote = CFG.privacyUrl ? `<p class="formnote"><a href="${esc(CFG.privacyUrl)}">Политика обработки персональных данных</a></p>` : '';
   if (/<form name="zayavka"/.test(html)) html = html.replace(/<form name="zayavka"[\s\S]*?<\/form>/i, `<div class="b24-form">\n${B24}\n${b24goal}\n${privNote}\n</div>`);
   // в форме заявки: примечание про согласие ведёт на политику
