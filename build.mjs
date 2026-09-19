@@ -496,7 +496,7 @@ function homePage() {
   // форма заявки: вместо formsubmit.co — российская Яндекс Форма (заявки приходят на почту владельца), встраивается в iframe
   const B24 = '<script src="https://forms.yandex.ru/_static/embed.js"></script><iframe src="https://forms.yandex.ru/u/6aaec6d695add50489ef6afb/?iframe=1" frameborder="0" name="ya-form-6aaec6d695add50489ef6afb" width="100%" style="border:0;min-height:460px" title="Заявка"></iframe>';
   const b24goal = '';
-  const privNote = CFG.privacyUrl ? `<p class="formnote">Нажимая «Отправить заявку», вы соглашаетесь с <a href="${esc(CFG.privacyUrl)}">политикой обработки персональных данных</a>.</p>` : '';
+  const privNote = CFG.privacyUrl ? `<p class="formnote" style="margin:.9rem 0 0;padding:.8rem 1rem;background:#fff4d6;border-left:4px solid #b07d2b;border-radius:6px;font-size:1rem;line-height:1.45;color:#1a1a1a">Нажимая «Отправить заявку», вы соглашаетесь с <a href="${esc(CFG.privacyUrl)}" style="font-weight:700;text-decoration:underline;color:#7a5410">политикой обработки персональных данных</a>.</p>` : '';
   if (/<form name="zayavka"/.test(html)) html = html.replace(/<form name="zayavka"[\s\S]*?<\/form>/i, `<div class="b24-form">\n${B24}\n${b24goal}\n${privNote}\n</div>`);
   // в форме заявки: примечание про согласие ведёт на политику
   if (CFG.privacyUrl) html = html.replace('Нажимая кнопку, вы соглашаетесь на обработку персональных данных.', `Нажимая кнопку, вы соглашаетесь с <a href="${esc(CFG.privacyUrl)}">политикой обработки персональных данных</a>.`);
