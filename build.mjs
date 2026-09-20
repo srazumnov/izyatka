@@ -243,6 +243,7 @@ a.card{text-decoration:none;color:inherit;display:flex;flex-direction:column}
 .cat-nav{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.4rem;padding:0;list-style:none}
 .cat-nav a{display:inline-block;padding:.4rem .8rem;border:1px solid var(--line);border-radius:var(--r);text-decoration:none;font-size:.92rem}
 .cat-nav a:hover,.cat-nav a[aria-current]{border-color:var(--accent);color:var(--accent)}
+.cat-seo{padding:clamp(2rem,4vw,3rem) 0;border-top:1px solid var(--line);max-width:820px}.cat-seo h2{font-size:1.5rem;text-transform:uppercase;margin:0 0 .9rem}.cat-seo h2:not(:first-child){margin-top:2.2rem}.cat-seo h3{font-size:1.1rem;margin:1.4rem 0 .4rem}.cat-seo p,.cat-seo li{line-height:1.6;margin:.6rem 0}.cat-seo .kinds{padding-left:1.2rem}
 .seo-links{padding:clamp(2rem,4vw,3rem) 0;border-top:1px solid var(--line)}
 .seo-links h2{font-size:1.5rem;text-transform:uppercase;margin-bottom:.9rem}
 .seo-links h3{font-size:1.1rem;margin:1.4rem 0 .6rem}
@@ -658,8 +659,96 @@ ${related.length ? `<section class="related"><h2>Ещё в разделе «${es
   return page({ title, description, path: l.path, ogImage: l.photoList[0] ? BASE + l.photoList[0].src : undefined, ogType: 'product', body, ld: [jsonLd(product), crumbsLd(crumbItems)] });
 }
 
+// ───────────────────────── тексты и вопросы-ответы разделов ─────────────────────────
+// Тексты строятся по данным каталога (число позиций, цены, города, марки, виды техники), поэтому обновляются сами.
+// Заголовки разделов подобраны по частотам Яндекс Вордстата: спрос идёт на «купить <тип> б/у».
+const SEO = {
+  'Грузовики': {
+    title: 'Купить грузовик, седельный тягач, самосвал б/у из лизинга — цены',
+    h2: 'Грузовая техника из лизинга: тягачи, самосвалы, фургоны',
+    lead: 'седельные тягачи, самосвалы, бортовые и тентованные грузовики, рефрижераторы и эвакуаторы',
+    ask: ['tractor', 'dump']
+  },
+  'Спецтехника': {
+    title: 'Купить спецтехнику б/у из лизинга: экскаваторы, погрузчики, краны — цены',
+    h2: 'Спецтехника из лизинга: экскаваторы, погрузчики, краны, катки',
+    lead: 'экскаваторы, погрузчики, автокраны, катки, бульдозеры, автобетоносмесители, лесная и дорожная техника',
+    ask: ['excavator', 'crane']
+  },
+  'Легковые': {
+    title: 'Купить легковой автомобиль из лизинга — каталог с ценами',
+    h2: 'Легковые автомобили из лизинга',
+    lead: 'легковые автомобили, кроссоверы, внедорожники, минивэны и микроавтобусы',
+    ask: ['car']
+  },
+  'Прицепы': {
+    title: 'Купить полуприцеп б/у: шторный, трал, рефрижератор — из лизинга',
+    h2: 'Полуприцепы и прицепы из лизинга',
+    lead: 'шторные и бортовые полуприцепы, тралы, рефрижераторы, цистерны и специальные прицепы',
+    ask: ['trailer']
+  },
+  'Сельхозтехника': {
+    title: 'Купить сельхозтехнику б/у из лизинга: тракторы и другая техника — цены',
+    h2: 'Сельскохозяйственная техника из лизинга',
+    lead: 'тракторы, бункеры-перегрузчики, жатки и другая сельскохозяйственная техника',
+    ask: ['agri']
+  },
+  'Оборудование': {
+    title: 'Купить оборудование б/у из лизинга — установки, заводы, станки',
+    h2: 'Промышленное оборудование из лизинга',
+    lead: 'производственные установки, дробильное и смесительное оборудование, краны и другое промышленное оборудование',
+    ask: ['equip']
+  },
+  'Автобусы': {
+    title: 'Купить автобус б/у из лизинга — цены и наличие',
+    h2: 'Автобусы из лизинга',
+    lead: 'городские, туристические и малые автобусы',
+    ask: ['bus']
+  }
+};
+const BRANDS = ['Volvo', 'Scania', 'MAN', 'DAF', 'Mercedes-Benz', 'Renault', 'Iveco', 'Shacman', 'Sitrak', 'HOWO', 'FAW', 'Foton', 'JAC', 'Dongfeng', 'Hongyan', 'Beiben', 'КАМАЗ', 'МАЗ', 'УРАЛ', 'ГАЗ', 'Ford', 'Isuzu', 'Sollers', 'ПАЗ', 'Wielton', 'Krone', 'Schmitz', 'Kassbohrer', 'Fliegl', 'Komatsu', 'Caterpillar', 'JCB', 'Sany', 'XCMG', 'Liugong', 'Lovol', 'Shantui', 'Bomag', 'John Deere', 'Claas', 'Belarus', 'Case', 'Terex', 'Manitou', 'Toyota', 'Lexus', 'BMW', 'Kia', 'Hyundai', 'Haval', 'Geely', 'Chery', 'Exeed', 'Changan', 'Tank', 'Volkswagen', 'Skoda', 'Mazda', 'Zoomlion', 'Bentley', 'Jeep', 'Chevrolet', 'Renault', 'Hongqi', 'Jaecoo', 'Zeekr'];
+function catBrands(c) {
+  const cnt = new Map();
+  for (const l of c.lots) {
+    const t = ` ${l.title.toLowerCase().replace(/[^a-zа-я0-9\- ]/gi, ' ')} `;
+    for (const b of BRANDS) if (t.includes(` ${b.toLowerCase()} `) || t.includes(` ${b.toLowerCase()}-`)) cnt.set(b, (cnt.get(b) || 0) + 1);
+  }
+  return [...cnt.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 10).map((x) => x[0]);
+}
+function catSeo(c) {
+  const conf = SEO[c.name];
+  if (!conf) return { html: '', faq: [] };
+  const prices = c.lots.map((l) => l.price).filter(isNum);
+  const cities = new Set(c.lots.map((l) => cityShort(l.city)).filter(Boolean));
+  const brands = catBrands(c);
+  const kinds = new Map();
+  for (const l of c.lots) { const k = kindOf(l); const e = kinds.get(k.label) || { n: 0, min: Infinity }; e.n++; if (isNum(l.price)) e.min = Math.min(e.min, l.price); kinds.set(k.label, e); }
+  const kindItems = [...kinds.entries()].sort((a, b) => b[1].n - a[1].n);
+  const n = c.lots.length;
+  const p = [];
+  p.push(`В этом разделе собраны ${conf.lead}, которые лизинговые компании забрали у прежних лизингополучателей. Сейчас в каталоге ${n} ${plural(n, ['позиция', 'позиции', 'позиций'])}${prices.length ? ` по цене от ${rub(Math.min(...prices))} до ${rub(Math.max(...prices))}` : ''}${cities.size > 1 ? `, техника находится в ${cities.size} ${plural(cities.size, ['городе', 'городах', 'городах'])} России` : ''}. В каждой карточке есть фото, характеристики и цена при покупке в лизинг с НДС.`);
+  if (brands.length) p.push(`Среди представленных марок: ${brands.join(', ')}. Если нужной модели нет в списке, напишите менеджеру: каталог пополняется, и мы подскажем похожие варианты.`);
+  p.push('Купить технику из лизинга можно двумя способами: оформить покупку в лизинг с авансом и графиком платежей под ваш оборот или оплатить сразу. Условия рассчитываем индивидуально — напишите в Telegram или оставьте заявку на сайте.');
+  const kindHtml = kindItems.length > 1 ? `<h3>Что есть в разделе</h3><ul class="kinds">${kindItems.map(([label, e]) => `<li>${esc(label)} — ${e.n} шт.${isFinite(e.min) ? `, от ${rub(e.min)}` : ''}</li>`).join('')}</ul>` : '';
+
+  const faq = [
+    ['Что значит «изъятая из лизинга» техника?', 'Это техника, которую лизинговая компания забрала у лизингополучателя после расторжения договора (как правило, из-за просрочек по платежам) и теперь продаёт. Такие позиции уже были в эксплуатации, поэтому смотрите год выпуска, пробег или наработку и осматривайте технику перед покупкой.'],
+    ['Можно купить в лизинг или только за наличные?', 'Можно и так, и так. В карточке указана цена при покупке в лизинг, у части позиций дополнительно показана цена при прямой покупке — так можно сравнить варианты. Аванс, срок и график платежей рассчитываем индивидуально.'],
+    ['Цена указана с НДС?', 'Да, цена в лизинг в карточках указана с НДС.'],
+    ['Можно ли осмотреть технику и договориться о цене?', 'Да. Осмотр согласуем заранее: напишите менеджеру в Telegram или оставьте заявку. У части позиций в описании указано, что после осмотра возможна скидка.'],
+    ['Как оформить покупку?', 'Напишите в Telegram или оставьте заявку на сайте: уточним наличие, рассчитаем аванс, срок и график платежей и подготовим документы.']
+  ];
+  const q = { tractor: 'седельного тягача', dump: 'самосвала', excavator: 'экскаватора', crane: 'крана или подъёмника', car: 'автомобиля из лизинга', trailer: 'полуприцепа', agri: 'сельхозтехники', equip: 'оборудования', bus: 'автобуса' };
+  for (const key of conf.ask) faq.push([`На что смотреть при покупке б/у ${q[key]}?`, ADVICE[key][0]]);
+
+  const html = `<section class="cat-seo"><h2>${esc(conf.h2)}</h2>${p.map((t) => `<p>${esc(t)}</p>`).join('')}${kindHtml}<h2>Вопросы и ответы</h2>${faq.map(([a, b]) => `<h3>${esc(a)}</h3><p>${esc(b)}</p>`).join('')}</section>`;
+  const ld = jsonLd({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([a, b]) => ({ '@type': 'Question', name: a, acceptedAnswer: { '@type': 'Answer', text: b } })) });
+  return { html, ld };
+}
+
 // ───────────────────────── страница раздела ─────────────────────────
 function catPage(c) {
+  const seo = catSeo(c);
   const prices = c.lots.map((l) => l.price).filter(isNum);
   const cities = new Set(c.lots.map((l) => cityShort(l.city)).filter(Boolean));
   const stat = [
@@ -675,10 +764,11 @@ function catPage(c) {
 ${crumbs(crumbItems.map((x) => (x.self ? { name: x.name } : x)))}
 <section class="cat-hero"><h1>${esc(c.h1)}</h1><p>${esc(c.intro)}</p><div class="cat-stats">${stat}</div></section>
 <section class="cat-list">${nav}<div class="grid">${c.lots.map(cardHtml).join('')}</div></section>
+${seo.html}
 </div>
 </main>`;
   const itemList = jsonLd({ '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: c.lots.slice(0, 50).map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: url(l.path), name: l.title })) });
-  return page({ title: c.title, description, path: c.path, body, ld: [itemList, crumbsLd(crumbItems)] });
+  return page({ title: (SEO[c.name] && SEO[c.name].title) || c.title, description, path: c.path, body, ld: [itemList, crumbsLd(crumbItems)].concat(seo.ld ? [seo.ld] : []) });
 }
 
 function plural(n, f) {
