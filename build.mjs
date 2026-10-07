@@ -752,6 +752,45 @@ ${crumbs(crumbItems.map((x) => (x.self ? { name: x.name } : x)))}
   return page({ title, description, path: p, body, ld: [itemList, crumbsLd(crumbItems)] });
 }
 
+function citySlug(c) { return slugify(c); }
+function normCity(c) {
+  return String(c || '').split(',')[0].trim()
+    .replace(/^(г|гор|пос|с)\.?\s+/i, '')
+    .replace(/\s+обл\.?$/i, ' область')
+    .replace(/\s+респ\.?$/i, ' Республика');
+}
+const CITY_LOTS = (() => {
+  const map = new Map();
+  for (const l of LOTS) {
+    const name = normCity(l.city);
+    if (!name) continue;
+    if (!map.has(name)) map.set(name, []);
+    map.get(name).push(l);
+  }
+  return [...map.entries()].map(([name, lots]) => ({ name, slug: citySlug(name), lots })).filter((c) => c.lots.length >= 3);
+})();
+
+function cityPage(c) {
+  const title = `Спецтехника и грузовики из лизинга в ${c.name} — купить б/у`;
+  const description = `${c.lots.length} ${plural(c.lots.length, ['позиция', 'позиции', 'позиций'])} спецтехники и грузовиков б/у в ${c.name}, изъятых лизинговыми компаниями. Фото, характеристики, цена в лизинг с НДС.`;
+  const prices = c.lots.map((l) => l.price).filter(isNum);
+  const stat = [
+    `<span><b>${c.lots.length}</b> ${plural(c.lots.length, ['позиция', 'позиции', 'позиций'])}</span>`,
+    prices.length ? `<span>цены от <b>${rub(Math.min(...prices))}</b> до <b>${rub(Math.max(...prices))}</b></span>` : ''
+  ].filter(Boolean).join('');
+  const p = '/gorod/' + c.slug + '/';
+  const crumbItems = [{ name: 'Главная', href: '/' }, { name: c.name, self: p }];
+  const body = `<main>
+<div class="wrap">
+${crumbs(crumbItems.map((x) => (x.self ? { name: x.name } : x)))}
+<section class="cat-hero"><h1>${esc('Спецтехника и грузовики из лизинга — город ' + c.name)}</h1><p>${esc('Техника и автомобили, изъятые лизинговыми компаниями у прежних лизингополучателей, с местонахождением: ' + c.name + '. Можно купить в лизинг с авансом под ваш оборот или за наличные.')}</p><div class="cat-stats">${stat}</div></section>
+<section class="cat-list"><div class="grid">${c.lots.map(cardHtml).join('')}</div></section>
+</div>
+</main>`;
+  const itemList = jsonLd({ '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: c.lots.map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: url(l.path) })) });
+  return page({ title, description, path: p, body, ld: [itemList, crumbsLd(crumbItems)] });
+}
+
 function catSeo(c) {
   const conf = SEO[c.name];
   if (!conf) return { html: '', faq: [] };
@@ -852,6 +891,8 @@ function homePage() {
 <ul>${latest.map((l) => `<li><a href="${l.path}">${esc(l.title)}${l.year ? ' ' + l.year : ''}</a></li>`).join('')}</ul>
 <h3>Популярные марки</h3>
 <ul>${BRAND_LOTS.slice().sort((a, b) => b.lots.length - a.lots.length).slice(0, 16).map((b) => `<li><a href="/marka/${b.slug}/">${esc(b.name)} (${b.lots.length})</a></li>`).join('')}</ul>
+<h3>Города</h3>
+<ul>${CITY_LOTS.slice().sort((a, b) => b.lots.length - a.lots.length).slice(0, 16).map((c) => `<li><a href="/gorod/${c.slug}/">${esc(c.name)} (${c.lots.length})</a></li>`).join('')}</ul>
 </div>
 </section>`;
   if (!/class="seo-links"/.test(html)) html = html.replace(/<footer[\s>]/i, (m) => seo + '\n' + m);
@@ -918,6 +959,7 @@ if (thanks) write('spasibo.html', thanks);
 for (const c of CATS) write(c.path.slice(1) + 'index.html', catPage(c));
 for (const l of LOTS) write(l.path.slice(1) + 'index.html', lotPage(l));
 for (const b of BRAND_LOTS) write('marka/' + b.slug + '/index.html', brandPage(b));
+for (const c of CITY_LOTS) write('gorod/' + c.slug + '/index.html', cityPage(c));
 
 if (hasPrivacy) {
   const vars = { legalName: CFG.legalName, inn: CFG.inn, address: CFG.address, phone: CFG.phone, email: CFG.email, siteUrl: BASE };
@@ -950,6 +992,7 @@ ${urlEntry(BASE + '/', lastmod(LOTS))}
 ${CATS.map((c) => urlEntry(url(c.path), lastmod(c.lots))).join('\n')}
 ${LOTS.map((l) => urlEntry(url(l.path), l.date)).join('\n')}
 ${BRAND_LOTS.map((b) => urlEntry(url('/marka/' + b.slug + '/'), lastmod(b.lots))).join('\n')}
+${CITY_LOTS.map((c) => urlEntry(url('/gorod/' + c.slug + '/'), lastmod(c.lots))).join('\n')}
 ${hasPrivacy ? urlEntry(url('/privacy/')) : ''}
 </urlset>
 `);
