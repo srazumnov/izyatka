@@ -715,6 +715,43 @@ function catBrands(c) {
   }
   return [...cnt.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 10).map((x) => x[0]);
 }
+
+function brandSlug(b) { return slugify(b); }
+const BRAND_LOTS = BRANDS.map((name) => {
+  const bl = name.toLowerCase();
+  return {
+    name,
+    slug: brandSlug(name),
+    lots: LOTS.filter((l) => {
+      const t = ` ${l.title.toLowerCase().replace(/[^a-zа-я0-9\- ]/gi, ' ')} `;
+      return t.includes(` ${bl} `) || t.includes(` ${bl}-`);
+    })
+  };
+}).filter((b) => b.lots.length >= 2);
+
+function brandPage(b) {
+  const title = `Купить ${b.name} б/у из лизинга — цены и наличие`;
+  const description = `${b.lots.length} ${plural(b.lots.length, ['позиция', 'позиции', 'позиций'])} ${b.name} б/у, изъятых лизинговыми компаниями. Фото, характеристики, цена в лизинг с НДС.`;
+  const prices = b.lots.map((l) => l.price).filter(isNum);
+  const cities = new Set(b.lots.map((l) => cityShort(l.city)).filter(Boolean));
+  const stat = [
+    `<span><b>${b.lots.length}</b> ${plural(b.lots.length, ['позиция', 'позиции', 'позиций'])}</span>`,
+    prices.length ? `<span>цены от <b>${rub(Math.min(...prices))}</b> до <b>${rub(Math.max(...prices))}</b></span>` : '',
+    cities.size > 1 ? `<span><b>${cities.size}</b> ${plural(cities.size, ['город', 'города', 'городов'])}</span>` : ''
+  ].filter(Boolean).join('');
+  const p = '/marka/' + b.slug + '/';
+  const crumbItems = [{ name: 'Главная', href: '/' }, { name: b.name, self: p }];
+  const body = `<main>
+<div class="wrap">
+${crumbs(crumbItems.map((x) => (x.self ? { name: x.name } : x)))}
+<section class="cat-hero"><h1>${esc('Купить ' + b.name + ' б/у из лизинга')}</h1><p>${esc('Техника и автомобили марки ' + b.name + ', изъятые лизинговыми компаниями у прежних лизингополучателей. Можно купить в лизинг с авансом под ваш оборот или за наличные.')}</p><div class="cat-stats">${stat}</div></section>
+<section class="cat-list"><div class="grid">${b.lots.map(cardHtml).join('')}</div></section>
+</div>
+</main>`;
+  const itemList = jsonLd({ '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: b.lots.map((l, i) => ({ '@type': 'ListItem', position: i + 1, url: url(l.path) })) });
+  return page({ title, description, path: p, body, ld: [itemList, crumbsLd(crumbItems)] });
+}
+
 function catSeo(c) {
   const conf = SEO[c.name];
   if (!conf) return { html: '', faq: [] };
@@ -813,6 +850,8 @@ function homePage() {
 <ul>${CATS.map((c) => `<li><a href="${c.path}">${esc(c.name)} (${c.lots.length})</a></li>`).join('')}</ul>
 <h3>Новые позиции</h3>
 <ul>${latest.map((l) => `<li><a href="${l.path}">${esc(l.title)}${l.year ? ' ' + l.year : ''}</a></li>`).join('')}</ul>
+<h3>Популярные марки</h3>
+<ul>${BRAND_LOTS.slice().sort((a, b) => b.lots.length - a.lots.length).slice(0, 16).map((b) => `<li><a href="/marka/${b.slug}/">${esc(b.name)} (${b.lots.length})</a></li>`).join('')}</ul>
 </div>
 </section>`;
   if (!/class="seo-links"/.test(html)) html = html.replace(/<footer[\s>]/i, (m) => seo + '\n' + m);
@@ -878,6 +917,7 @@ const thanks = thanksPage() ?? (fs.existsSync(path.join(ROOT, 'spasibo.html')) ?
 if (thanks) write('spasibo.html', thanks);
 for (const c of CATS) write(c.path.slice(1) + 'index.html', catPage(c));
 for (const l of LOTS) write(l.path.slice(1) + 'index.html', lotPage(l));
+for (const b of BRAND_LOTS) write('marka/' + b.slug + '/index.html', brandPage(b));
 
 if (hasPrivacy) {
   const vars = { legalName: CFG.legalName, inn: CFG.inn, address: CFG.address, phone: CFG.phone, email: CFG.email, siteUrl: BASE };
@@ -909,6 +949,7 @@ write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 ${urlEntry(BASE + '/', lastmod(LOTS))}
 ${CATS.map((c) => urlEntry(url(c.path), lastmod(c.lots))).join('\n')}
 ${LOTS.map((l) => urlEntry(url(l.path), l.date)).join('\n')}
+${BRAND_LOTS.map((b) => urlEntry(url('/marka/' + b.slug + '/'), lastmod(b.lots))).join('\n')}
 ${hasPrivacy ? urlEntry(url('/privacy/')) : ''}
 </urlset>
 `);
