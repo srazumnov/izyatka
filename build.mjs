@@ -915,6 +915,7 @@ ${hasPrivacy ? urlEntry(url('/privacy/')) : ''}
 write('robots.txt', `User-agent: *
 Allow: /
 Disallow: /spasibo.html
+Disallow: /catalog/
 
 Sitemap: ${BASE}/sitemap.xml
 `);
