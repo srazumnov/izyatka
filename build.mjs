@@ -605,12 +605,15 @@ function lotPage(l) {
     ? `<div class="lot-gal">${img(l.photoList[0], 0, true)}${l.photoList.length > 1 ? `<div class="thumbs">${l.photoList.slice(1).map((p, i) => img(p, i + 1, false)).join('')}</div>` : ''}</div>`
     : `<div class="lot-gal"><div class="ph"><div class="fallback">${esc(l.category)}</div></div></div>`;
 
+  const lotBrand = BRAND_LOTS.find((b) => b.lots.includes(l));
+  const lotCity = CITY_LOTS.find((c) => c.lots.includes(l));
   const specs = [
     ['Категория', `<a href="${cat.path}">${esc(l.category)}</a>`],
+    lotBrand && ['Марка', `<a href="/marka/${lotBrand.slug}/">${esc(lotBrand.name)}</a>`],
     l.year && ['Год выпуска', esc(l.year)],
     l.mileage && ['Пробег', esc(l.mileage)],
     l.engine && ['Двигатель', esc(l.engine)],
-    l.city && ['Город', esc(l.city)],
+    l.city && ['Город', lotCity ? `<a href="/gorod/${lotCity.slug}/">${esc(l.city)}</a>` : esc(l.city)],
     isNum(l.priceCash) && ['Цена при прямой покупке', rub(l.priceCash)],
     l.date && ['Добавлено', ruDate(l.date)]
   ].filter(Boolean).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
