@@ -8281,7 +8281,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
     var list = DATA.filter(function(d){
       if(state.cat !== "Все" && d.category !== state.cat) return false;
       if(!state.q) return true;
-      var hay = (d.title + " " + d.city + " " + d.category + " " + (d.engine||"") + " " + d.text).toLowerCase();
+      var hay = (d.title + " " + d.city + " " + d.category + " " + (d.engine||"") + " " + (d.text||"")).toLowerCase();
       return hay.indexOf(state.q) !== -1;
     });
     var s = state.sort;
@@ -8302,7 +8302,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
       return;
     }
     grid.innerHTML = list.map(function(d){
-      var saving = d.priceCash ? d.priceCash - d.price : 0;
+      var saving = (typeof d.price === "number" && d.priceCash) ? d.priceCash - d.price : 0;
       return '<button class="card" type="button" data-id="' + esc(d.id) + '">' +
         '<div class="ph">' +
           '<span class="tag' + (d.tag && d.tag !== "Изъятая" ? " tag-new" : "") + '">' + esc(d.tag || "Изъятая") + '</span>' +
@@ -8311,7 +8311,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
         '</div>' +
         '<div class="card-b">' +
           '<h3>' + esc(d.title) + '</h3>' +
-          '<div class="price num">' + rub(d.price) + (typeof d.price === "number" ? '<small>в лизинг, с НДС</small>' : '') + '</div>' +
+          (typeof d.price === "number" ? '<div class="price num">' + rub(d.price) + '<small>в лизинг, с НДС</small></div>' : (typeof d.priceCash === "number" ? '<div class="price num">' + rub(d.priceCash) + '<small>цена без лизинга</small></div>' : '')) +
           (saving > 0 ? '<div class="saving num">На ' + rub(saving) + ' дешевле прямой покупки</div>' : '') +
           '<div class="specs">' +
             (d.year ? '<span>' + d.year + ' г.</span>' : '') +
@@ -8347,11 +8347,11 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
     currentItem = d;
     document.getElementById("m-title").textContent = d.title;
     var gal = "";
-    for(var i = 1; i <= Math.min(d.photos || 1, 20); i++) gal += photo(d, i);
-    var saving = d.priceCash ? d.priceCash - d.price : 0;
+    for(var i = 1; i <= Math.min(d.photos || (d.images && d.images.length) || 1, 20); i++) gal += photo(d, i);
+    var saving = (typeof d.price === "number" && d.priceCash) ? d.priceCash - d.price : 0;
     var rows = [
-      ["Цена в лизинг", '<b class="num">' + rub(d.price) + '</b>' + (typeof d.price === "number" ? ' с НДС' : '')],
-      d.priceCash ? ["Цена без лизинга", '<span class="num">' + rub(d.priceCash) + '</span> с НДС'] : null,
+      typeof d.price === "number" ? ["Цена в лизинг", '<b class="num">' + rub(d.price) + '</b> с НДС'] : (d.priceCash ? ["Цена без лизинга", '<b class="num">' + rub(d.priceCash) + '</b> с НДС'] : null),
+      (typeof d.price === "number" && d.priceCash) ? ["Цена без лизинга", '<span class="num">' + rub(d.priceCash) + '</span> с НДС'] : null,
       d.year ? ["Год выпуска", d.year] : null,
       d.mileage ? ["Пробег", '<span class="num">' + esc(d.mileage) + '</span>'] : null,
       d.engine ? ["Характеристики", esc(d.engine)] : null,
@@ -8365,7 +8365,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
       '<table class="table"><tbody>' + rows.map(function(r){
         return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
       }).join("") + '</tbody></table>' +
-      '<div class="desc">' + d.text.split("\n\n").map(function(p){
+      '<div class="desc">' + (d.text || "").split("\n\n").map(function(p){
         return '<p>' + esc(p) + '</p>';
       }).join("") + '</div>' +
       '<div class="m-cta">' +
@@ -8389,7 +8389,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
     var d = lbState.d; if(!d) return;
     lbImg.src = "images/" + d.id + "-" + lbState.i + ".jpg";
     lbImg.alt = d.title + " — фото " + lbState.i;
-    var total = Math.min(d.photos || 1, 20);
+    var total = Math.min(d.photos || (d.images && d.images.length) || 1, 20);
     lbCount.textContent = lbState.i + " / " + total;
     var multi = total > 1;
     document.getElementById("lb-prev").style.display = multi ? "" : "none";
@@ -8406,7 +8406,7 @@ footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);f
 
   function lbStep(delta){
     var d = lbState.d; if(!d) return;
-    var total = Math.min(d.photos || 1, 20);
+    var total = Math.min(d.photos || (d.images && d.images.length) || 1, 20);
     lbState.i = ((lbState.i - 1 + delta) % total + total) % total + 1;
     lbRender();
   }
